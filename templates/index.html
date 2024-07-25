@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Optimizer</title>
 </head>
-
 <body>
     <h1>Stock Optimizer</h1>
     <form id="optimizer-form" action="/optimize" method="post">
@@ -41,6 +39,15 @@
                     "Best lower limit: ${result.best_lower_limit}"<br>
                     "Best Profit/Loss: ${result.best_profit_loss}"<br>
                     "Current Trend: ${result.current_trend}"
+                    <br><br>
+                    <form id="validate-form">
+                        <input type="hidden" name="ticker" value="${result.ticker}">
+                        <input type="hidden" name="upper_limit" value="${result.best_upper_limit}">
+                        <input type="hidden" name="lower_limit" value="${result.best_lower_limit}">
+                        <input type="hidden" name="initial_capital" value="${form.querySelector('input[name="initial_capital"]').value}">
+                        <button type="submit">Validate</button>
+                    </form>
+                    <div id="validate-result"></div>
                 `;
             } else {
                 document.getElementById('result').innerHTML = result.error;
@@ -54,7 +61,28 @@
             document.getElementById('reset-button').style.display = 'none';
             document.getElementById('optimizer-form').reset();
         });
+
+        document.addEventListener('submit', async (e) => {
+            if (e.target.id === 'validate-form') {
+                e.preventDefault();
+                const form = e.target;
+                const data = new FormData(form);
+
+                const response = await fetch('/validate', {
+                    method: 'POST',
+                    body: data
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('validate-result').innerHTML = `
+                        "Validation Profit/Loss: ${result.validation_profit_loss}"
+                    `;
+                } else {
+                    document.getElementById('validate-result').innerHTML = result.error;
+                }
+            }
+        });
     </script>
 </body>
-
 </html>

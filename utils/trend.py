@@ -2,8 +2,8 @@ import pandas as pd
 from controllers.trade import TradeController
 from config.vars import short_term_window, long_term_window
 
-def determine_trend(prices):
-    trade_controller = TradeController(pd.DataFrame(prices), "")
+def determine_trend(prices, initial_capital):
+    trade_controller = TradeController(pd.DataFrame(prices), "", initial_capital)
     short_term_ma = trade_controller.calculate_moving_average(prices, short_term_window)
     long_term_ma = trade_controller.calculate_moving_average(prices, long_term_window)
 

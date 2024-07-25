@@ -1,1 +1,5 @@
 .idea/*
+.venv/
+tickersymbolslist/
+stock_data.db
+optical_parameter_log/
