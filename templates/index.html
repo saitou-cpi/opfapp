@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Optimizer</title>
+</head>
+
+<body>
+    <h1>Stock Optimizer</h1>
+    <form id="optimizer-form" action="/optimize" method="post">
+        <label for="ticker">Enter Ticker Symbol:</label>
+        <input type="text" id="ticker" name="ticker" required pattern="[A-Z0-9]{4}"><br>
+        <label for="initial_capital">Enter Initial Capital:</label>
+        <input type="number" id="initial_capital" name="initial_capital" required min="1" step="any"><br>
+        <button type="submit">Optimize</button>
+    </form>
+    <div id="result"></div>
+    <button id="reset-button" style="display: none;">Reset</button>
+    <br>
+    <a href="/help">Help</a>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            document.getElementById('result').innerHTML = "計算中...";
+            const form = e.target;
+            const data = new FormData(form);
+
+            const response = await fetch('/optimize', {
+                method: 'POST',
+                body: data
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('result').innerHTML = `
+                    "Ticker: ${result.ticker}"<br>
+                    "Best upper limit: ${result.best_upper_limit}"<br>
+                    "Best lower limit: ${result.best_lower_limit}"<br>
+                    "Best Profit/Loss: ${result.best_profit_loss}"<br>
+                    "Current Trend: ${result.current_trend}"
+                `;
+            } else {
+                document.getElementById('result').innerHTML = result.error;
+            }
+
+            document.getElementById('reset-button').style.display = 'block';
+        });
+
+        document.getElementById('reset-button').addEventListener('click', () => {
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('reset-button').style.display = 'none';
+            document.getElementById('optimizer-form').reset();
+        });
+    </script>
+</body>
+
+</html>
