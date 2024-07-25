@@ -105,7 +105,7 @@ def main():
         if last_update_date:
             start_date = last_update_date + datetime.timedelta(days=1)
         else:
-            start_date = end_date - datetime.timedelta(days=100)  # データがない場合は過去100日分取得
+            start_date = end_date - datetime.timedelta(days=30)  # データがない場合は過去100日分取得
 
         try:
             fetch_and_store_stock_data(ticker, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
