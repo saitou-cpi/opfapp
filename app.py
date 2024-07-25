@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from controllers.optimal_parameter_finder import process_ticker
+from controllers.optimal_parameter_finder import process_ticker, validate_parameters
 from models.database import check_ticker_symbol
 
 app = Flask(__name__)
