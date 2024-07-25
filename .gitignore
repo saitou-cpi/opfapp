@@ -2,5 +2,5 @@
 .venv/
 tickersymbolslist/
 stock_data.db
-optical_parameter_log/
+optimal_parameter_log/
 *__pycache__*
