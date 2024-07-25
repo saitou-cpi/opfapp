@@ -1,4 +1,4 @@
-get_ticker_symbols.pyimport os
+import os
 import requests
 import pandas as pd
 
