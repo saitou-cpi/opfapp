@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from controllers.optimal_parameter_finder import process_ticker, validate_parameters
+from controllers.optimal_parameter_finder import process_ticker
 from models.database import check_ticker_symbol
 
 app = Flask(__name__)
@@ -23,23 +23,6 @@ def optimize():
         return jsonify({"error": "売買不成立"}), 400
 
     return jsonify(result)
-
-@app.route('/validate', methods=['POST'])
-def validate():
-    ticker_symbol = request.form['ticker']
-    upper_limit = request.form.get('upper_limit', type=float)
-    lower_limit = request.form.get('lower_limit', type=float)
-    initial_capital = request.form.get('initial_capital', type=int)
-
-    if not all([ticker_symbol, upper_limit, lower_limit, initial_capital]):
-        return jsonify({"error": "All parameters are required for validation"}), 400
-
-    try:
-        validation_result = validate_parameters(ticker_symbol, upper_limit, lower_limit, initial_capital)
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
-    return jsonify(validation_result)
 
 @app.route('/help')
 def help():
