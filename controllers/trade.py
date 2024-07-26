@@ -36,16 +36,19 @@ class TradeController:
 
     def get_daily_prices(self, df):
         try:
-            daily_df = df.resample('D').agg({'close': 'last'}).dropna()
-            return daily_df['close'].tolist()
+            daily_df = df['close'].resample('D').last().dropna()
+            prices = daily_df.values  # リストではなくNumPy配列を使用
+            return prices
         except Exception as e:
             self.logger.error(f"Error loading daily prices: {e}")
-            return []
+            return np.array([])
 
     def calculate_moving_average(self, prices, window):
         if len(prices) < window:
             return None
-        return np.convolve(prices, np.ones(window), 'valid') / window
+        cumsum = np.cumsum(np.insert(prices, 0, 0))
+        moving_avg = (cumsum[window:] - cumsum[:-window]) / float(window)
+        return moving_avg
 
     def trading_logic(self, current_price, upper_limit, lower_limit):
         action, quantity = None, 0
