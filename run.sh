@@ -5,4 +5,4 @@ export FLASK_APP=app.py
 export FLASK_ENV=production
 
 # Gunicornの起動
-gunicorn -w 4 -b 0.0.0.0:8000 app:app
+exec gunicorn -w 4 -b 0.0.0.0:8000 --timeout 60 app:app
