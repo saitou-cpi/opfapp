@@ -82,21 +82,3 @@ def process_ticker(ticker_symbol, initial_capital):
     save_results_to_csv(ticker_symbol, results, log_dir)
 
     return result
-
-def validate_parameters(ticker_symbol, upper_limit, lower_limit, initial_capital):
-    # 直近1週間のデータを取得
-    df = load_stock_data(ticker_symbol, days=7)
-
-    if df.empty:
-        raise ValueError("No data available for validation period")
-
-    final_value, profit_loss, _ = optimize_parameters(df, upper_limit, lower_limit, ticker_symbol, initial_capital)
-
-    validation_result = {
-        "ticker": ticker_symbol,
-        "upper_limit": upper_limit,
-        "lower_limit": lower_limit,
-        "validation_profit_loss": profit_loss
-    }
-
-    return validation_result
