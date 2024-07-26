@@ -21,6 +21,16 @@
 
 この注意事項を理解し、同意した上でご利用いただけるようお願い申し上げます。
 
+## Setting
+sudo dnf install -y python3-pip git
+pip install virtualenv
+
+git clone https://github.com/saitou-cpi/opfapp.git
+cd opfapp/
+virtualenv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+sudo chmod a+x run.sh
 
 gunicorn -w 4 -b 0.0.0.0:8000 app:app
 
